@@ -14,19 +14,35 @@ export default function Login() {
     }
 
     const submitTeacher = () => {
-    axios.post('https://test-dev.tikal.tech/adm/admin/login', {email, password}).then(response => {
-    console.log(response.data);
-    localStorage.setItem('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDAyMzg0NjUsImV4cCI6MTcwMDMyNDg2NX0.Ba2EEXoSf5ctQTHvhR7S_gu3vO0ns5hUHOgmdpC6bYM')
-    router.push('/teacherprofile')
-    });
-    }
+      axios.post('https://test-dev.tikal.tech/adm/admin/login', { email, password })
+        .then(response => {
+          const token = response.data.token;    
+          localStorage.setItem('token', token);
+          router.push('/teacherprofile');
+        })
+        .catch(error => {
+          console.error('Erro no login:', error);
+        });
+    };
 
-    const submitStudent = () => {
-        axios.post('https://test-dev.tikal.tech/aluno/student/login', {email, password}).then(response => {
-            console.log(response.data);
-            localStorage.setItem('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVmYjhkYjQyLTIzMzYtNDg0OC04N2QyLThhNTIxZjU1ZjhmMyIsImlhdCI6MTcwMDI1NTM0OSwiZXhwIjoxNzAwMzQxNzQ5fQ.lQxdVxbbzPahPL5VrMmHta_dO6EvBHsi8NS9lqN2lFk   ')
-            router.push('/studentprofile')
-            });
+    const submitStudent = 
+    () => {
+
+      axios.post('https://test-dev.tikal.tech/adm/admin/login', { email, password })
+        .then(response => {
+          const token = response.data.token;    
+          localStorage.setItem('token', token);
+          router.push('/studentprofile');
+        })
+        .catch(error => {
+          console.error('Erro no login:', error);
+        });
+
+                // axios.post('https://test-dev.tikal.tech/aluno/student/login', {email, password}).then(response => {
+        //     console.log(response.data);
+        //     localStorage.setItem('token','token')
+        //     router.push('/studentprofile')
+        //     });
     }
 
     useEffect( () => {

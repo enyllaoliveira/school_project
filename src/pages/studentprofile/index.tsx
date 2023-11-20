@@ -25,6 +25,7 @@ interface Student {
   scores: Score[];
 } 
 
+
 export default function StudentProfile() {
 
   const [student, setStudent] = useState<Student | null>(null);
