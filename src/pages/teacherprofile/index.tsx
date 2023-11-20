@@ -2,6 +2,7 @@
   import HeaderTeacher from "@/components/headerTeacher";
   import { useEffect, useState } from "react";
   import axios from 'axios';
+  import { VscArrowDown } from "react-icons/vsc";
 
 
   interface Score {
@@ -28,7 +29,7 @@
 
   export default function TeacherProfile() {
 
-    const [students, setStudents] = useState<Student[]>([])
+  const [students, setStudents] = useState<Student[]>([])
     
     useEffect(() => {
       const token = localStorage.getItem('token')
@@ -38,49 +39,53 @@
       }); 
     }, [])
 
+
+    function formatedData(dataISO: string) {
+      return new Date(dataISO).toLocaleDateString('pt-BR');
+    }
     return (
-      <div>
+  
+        <div>
         <Header />
-        <div
-          className={`
-            bg-gray-200 h-screen 
-            flex flex-col justify-center items-center 
-          `}>
-            <div className="flex flex-row justify-between">
-            <HeaderTeacher />
-            </div>
-          <div className="max-w-7xl w-full overflow-x-auto">
-          <table className="w-full lg:w-4/5 xl:w-11/12 mx-auto">
-            <thead>
-              <tr>
-                <th> Nome do aluno</th>
-                <th> Nome </th>
-                <th> Avaliação 1 </th>
-                <th> Avaliação 2 </th>
-                <th> Avaliação 3 </th>
-                <th> Avaliação 4 </th>
-                <th> Média final </th>
-                <th> Situação </th>
-              </tr>
-            </thead>
-            <tbody>
-              {students.map(student => (
-              <tr key={student.id}>
-                <td>{student.firstName} {student.lastName}</td>
-                <td>{student.scores[0].updatedAt} </td>
-                    <td>{student.scores[0].n1} </td>
-                    <td>{student.scores[0].n2} </td>
-                    <td>{student.scores[0].n3} </td>
-                    <td>{student.scores[0].n4} </td>
-                    <td>{student.scores[0].average}</td>
-                    <td>{student.scores[0].situation} </td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
+        <div className="bg-gray-200 min-h-screen flex flex-col">
+          <HeaderTeacher />
+          <div className="p-3 text-center mx-4 lg:mx-4 overflow-x-auto">
+            
+            <table className="min-w-full bg-white border rounded-md border-gray-300">
+              <thead>
+                <tr className="bg-gray-100">
+                <th className="p-8 text-sm lg:text-base flex items-center"> Nome do aluno <VscArrowDown /> </th>                  <th className="p-8 text-sm lg:text-base">Atualização</th>
+                  <th className="p-8 text-sm lg:text-base">Avaliação 1</th>
+                  <th className="p-8 text-sm lg:text-base">Avaliação 2</th>
+                  <th className="p-8 text-sm lg:text-base">Avaliação 3</th>
+                  <th className="p-8 text-sm lg:text-base">Avaliação 4</th>
+                  <th className="p-8 text-sm lg:text-base">Média final</th>
+                  <th className="p- text-sm lg:text-base">Situação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {students.map(student => (
+                  <tr key={student.id}>
+                    <td className="p-8 text-sm lg:text-base whitespace-nowrap">{student.firstName} {student.lastName}</td>
+                    <td className="p-4 text-sm lg:text-base whitespace-nowrap">
+                    {formatedData(student.scores[0].updatedAt)} </td>        
+                        
+                    <td className="p-4 text-sm lg:text-base whitespace-nowrap">{student.scores[0].n1}</td>
+                    <td className="p-4 text-sm lg:text-base whitespace-nowrap">{student.scores[0].n2}</td>
+                    <td className="p-4 text-sm lg:text-base whitespace-nowrap">{student.scores[0].n3}</td>
+                    <td className="p-4 text-sm lg:text-base whitespace-nowrap">{student.scores[0].n4}</td>
+                    <td className="p-4 text-sm lg:text-base whitespace-nowrap">{student.scores[0].average}</td>
+                    <td className="p-4 whitespace-nowrap">
+                      <span className={`block ${student.scores[0].situation === 'Reprovado' ? 'bg-red-500' : 'bg-green-500'} text-white rounded-full p-1 text-sm lg:text-base`}>
+                        {student.scores[0].situation}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          
         </div>
       </div>
-    );
-  }
+      );
+    }

@@ -2,26 +2,19 @@ import { IoMdSearch } from "react-icons/io";
 
 export default function HeaderTeacher() {
   return (
-    <div className="flex items-center">
-      <section>
-        <p className="font-bold text-3xl ml-0">Meus alunos</p>
+    <header className="flex flex-row lg:flex-row items-center justify-between my-10 mx-4 lg:mx-8">
+      <section className="mb-4 lg:mb-0">
+      <h1 className="font-bold text-2xl lg:text-3xl"> Meus alunos </h1>
       </section>
-      <section
-        className={`
-          flex items-center p-3 
-          text-slate-500 rounded-md mr-0
-          bg-white border border-gray-300 font-thin
-        `}
-      >
+      <section className="flex p-3 text-center mt-4 lg:mt-0  bg-white border rounded-md border-gray-300 font-thin">
         <input
           type="text"
           placeholder="Pesquisar aluno(a)"
-          className="focus:border-transparent focus:outline-none"
-        />
-        <button className="flex items-center">
+          className="focus:border-transparent outline-none" />
+        <button>
           <IoMdSearch className="text-xl" />
         </button>
       </section>
-    </div>
+    </header>
   );
 }

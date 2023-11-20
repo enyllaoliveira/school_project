@@ -16,33 +16,27 @@ export default function Login() {
     const submitTeacher = () => {
       axios.post('https://test-dev.tikal.tech/adm/admin/login', { email, password })
         .then(response => {
-          const token = response.data.token;    
-          localStorage.setItem('token', token);
-          router.push('/teacherprofile');
+        const token = response.data.token;    
+        localStorage.setItem('token', token);
+        router.push('/teacherprofile');
         })
         .catch(error => {
-          console.error('Erro no login:', error);
+        console.error('Erro no login:', error);
         });
     };
 
     const submitStudent = 
     () => {
 
-      axios.post('https://test-dev.tikal.tech/adm/admin/login', { email, password })
-        .then(response => {
-          const token = response.data.token;    
-          localStorage.setItem('token', token);
-          router.push('/studentprofile');
+      axios.post('https://test-dev.tikal.tech/aluno/student/login', { email, password }).then(response => {
+        const token = response.data.token;    
+        localStorage.setItem('token', token);
+        router.push('/studentprofile');
         })
         .catch(error => {
-          console.error('Erro no login:', error);
+        console.error('Erro no login:', error);
         });
 
-                // axios.post('https://test-dev.tikal.tech/aluno/student/login', {email, password}).then(response => {
-        //     console.log(response.data);
-        //     localStorage.setItem('token','token')
-        //     router.push('/studentprofile')
-        //     });
     }
 
     useEffect( () => {
@@ -51,60 +45,64 @@ export default function Login() {
 
   return (
 
-      <div className={`
-        bg-gray-200 
-        flex justify-center items-center h-full
-      `}>
-
-        <div className={`
-          bg-gray-100 h-3/5 w-2/6 p-8 
-        `}>
-
-        <h1 className='text-black text-lg font-bold mb-16 text-right'> { isTeacher ? 'Área do professor' : 'Área do aluno' } </h1>
-
-
-        <form className='items-center justify-center'>
-          <section className='mx-12'>
-            <label className="block text-gray-700 text-lg font-bold mb-4">Usuário</label>
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-3 mb-12 px-4 text-lg text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-            />
-          </section>
-
-          <section className='mx-12'>
-            <label className="block text-gray-700 text-lg font-bold mb-4">Senha</label>
-            <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="shadow appearance-none border rounded w-full mb-16 py-3 px-4 text-lg text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="password"
-            />
-          </section>
-
-          <section className="flex flex-col">
-          <button
-          disabled={isButtonDisabled}
-          onClick={isTeacher ? submitTeacher : submitStudent}
-          className={`${
-            isButtonDisabled
-            ? 'bg-gray-500'
-            : 'bg-blue-500 hover:bg-blue-700'
-            } text-white font-bold text-lg py-3 md:px-10 w-full mx-12 mb-10 md:w-auto rounded`}
-            type="button"> Acessar </button>
-
-          <button
-            className={`text-black font-bold  hover:text-red-500 text-lg py-2 px-10 mb-10`}
-            type="button"> Esqueceu sua senha?
-        </button>
+    <div className={`
+    bg-gray-200 
+    flex justify-center items-center min-h-screen`}>
+  
+    <div className={`
+    bg-gray-100 w-full sm:w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 p-8 `}>
+  
+      <h1 className='text-black text-lg font-bold mb-6 md:mb-8 text-center md:text-right'>
+        {isTeacher ? 'Área do professor' : 'Área do aluno'}
+      </h1>
+  
+      <form className='flex flex-col items-center justify-center'>
+        <section className='w-full mb-4 md:w-4/5 lg:w-3/4'>
+          <label className="block text-gray-700 text-lg font-bold mb-2">Usuário</label>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-4 text-lg text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"/>
         </section>
-        <a onClick={changeUser} className="hover:underline font-thin text-sm md:text-base lg:text-lg flex justify-center">
-        {!isTeacher ? 'Acessar área do professor' : 'Acessar área do aluno'}</a>        
-        </form>
-        </div>
-
-      </div>
+  
+        <section className="w-full mb-4 md:w-4/5 lg:w-3/4">
+          <label className="block text-gray-700 text-lg font-bold mb-2">Senha</label>
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-4 text-lg text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="password" />
+        </section>
+  
+        <section className="w-full mb-4 md:w-4/5 lg:w-3/4">
+          <button
+            disabled={isButtonDisabled}
+            onClick={isTeacher ? submitTeacher : submitStudent}
+            className={`${
+              isButtonDisabled
+                ? 'bg-gray-500'
+                : 'bg-blue-500 hover:bg-blue-700'
+                } text-white font-bold text-lg py-2 md:px-8 w-full rounded`}
+                type="button"> Acessar
+          </button>
+        </section>
+  
+        <section className="w-full mb-4 md:w-4/5 lg:w-3/4 flex justify-center">
+          <button
+            className={`text-black font-bold hover:text-red-500 text-lg py-2 px-8`}
+            type="button">
+            Esqueceu sua senha?
+          </button>
+        </section>
+  
+        <section className="w-full md:w-4/5 lg:w-3/4">
+          <a onClick={changeUser} className="hover:underline font-thin text-sm md:text-base lg:text-lg mt-2 block text-center">
+            {!isTeacher ? 'Acessar área do professor' : 'Acessar área do aluno'}
+          </a>
+        </section>
+      </form>
+    </div>
+  </div>
   );
 }
