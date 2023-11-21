@@ -1,8 +1,10 @@
 import Header from "@/components/header"
+import HeaderProfile from "@/components/headerProfiles";
 import HeaderStudent from "@/components/headerStudent";
 import axios from "axios"
 import { useState } from "react"
 import { useEffect } from "react"
+
 
 interface Score {
   id: string;
@@ -43,7 +45,7 @@ export default function StudentProfile() {
       <div>
       <Header/>        
       <div className="bg-gray-200 min-h-screen flex flex-col">
-      <HeaderStudent/>
+      <HeaderProfile title={"Minhas notas"}/>
       <div className="p-3 text-center mx-4 lg:mx-4 overflow-x-auto">
       <div className={`
       bg-gray-100 `}>
@@ -71,7 +73,8 @@ export default function StudentProfile() {
                       <span className={`block ${student.scores[0].situation === 'Reprovado' ? 'bg-red-500' : 'bg-green-500'} text-white rounded-full p-1 text-sm lg:text-base`}>
                         {student.scores[0].situation}
                       </span>
-                    </td>                </tr>
+                    </td>                
+                </tr>
               </tbody>
             </table>
         

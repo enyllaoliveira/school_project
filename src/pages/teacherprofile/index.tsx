@@ -1,5 +1,5 @@
   import Header from "@/components/header";
-  import HeaderTeacher from "@/components/headerTeacher";
+  import HeaderProfile from "@/components/headerProfiles";
   import { useEffect, useState } from "react";
   import axios from 'axios';
   import { VscArrowDown } from "react-icons/vsc";
@@ -48,7 +48,7 @@
         <div>
         <Header />
         <div className="bg-gray-200 min-h-screen flex flex-col">
-          <HeaderTeacher />
+          <HeaderProfile title={"Meus alunos"} />
           <div className="p-3 text-center mx-4 lg:mx-4 overflow-x-auto">
             
             <table className="min-w-full bg-white border rounded-md border-gray-300">

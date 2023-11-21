@@ -30,10 +30,12 @@ export default function Header() {
         <button className="text-base md:text-lg lg:text-xl">Contate-nos</button>
         
         <section>
-          <button className={`
+          <button onClick={() => router.push ('/')}
+          className={`
            bg-sky-700 text-white
-            p-3 md:p-5 rounded-lg`}> Perfil</button>
+            md:p-3 rounded-lg `}> Sair da conta </button>
         </section>
+      
         </nav>
   
       </div>
