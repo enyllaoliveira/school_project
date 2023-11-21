@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loading from '@/components/loading';
 
 export default function Login() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isTeacher, setIsTeacher] = useState<boolean>(false);
+    const [showLoading, setShowLoading] = useState(false);
     const router = useRouter();
     const isButtonDisabled = !email || !password;
 
@@ -14,6 +16,7 @@ export default function Login() {
     }
 
     const submitTeacher = () => {
+      setShowLoading(true)
       axios.post('https://test-dev.tikal.tech/adm/admin/login', { email, password })
         .then(response => {
         const token = response.data.token;    
@@ -22,12 +25,15 @@ export default function Login() {
         })
         .catch(error => {
         console.error('Erro no login:', error);
-        });
+        })
+        .finally(() => {
+          setShowLoading(false)
+        })
+        ;
     };
 
-    const submitStudent = 
-    () => {
-
+    const submitStudent = () => {
+      setShowLoading(true)
       axios.post('https://test-dev.tikal.tech/aluno/student/login', { email, password }).then(response => {
         const token = response.data.token;    
         localStorage.setItem('token', token);
@@ -35,8 +41,11 @@ export default function Login() {
         })
         .catch(error => {
         console.error('Erro no login:', error);
-        });
-
+        })
+        .finally(() => {
+          setShowLoading(false)
+        })
+        ;
     }
 
     useEffect( () => {
@@ -102,6 +111,7 @@ export default function Login() {
           </a>
         </section>
       </form>
+      { showLoading && <Loading/>}
     </div>
   </div>
   );

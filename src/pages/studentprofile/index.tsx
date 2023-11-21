@@ -1,6 +1,5 @@
 import Header from "@/components/header"
 import HeaderProfile from "@/components/headerProfiles";
-import HeaderStudent from "@/components/headerStudent";
 import axios from "axios"
 import { useState } from "react"
 import { useEffect } from "react"
