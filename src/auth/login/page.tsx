@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Loading from '@/components/loading';
+import { signIn } from "next-auth/react";
 
 export default function Login() {
     const [email, setEmail] = useState<string>('');
@@ -15,21 +16,14 @@ export default function Login() {
         setIsTeacher(!isTeacher)
     }
 
-    const submitTeacher = () => {
-      setShowLoading(true)
-      axios.post('https://test-dev.tikal.tech/adm/admin/login', { email, password })
-        .then(response => {
-        const token = response.data.token;    
-        localStorage.setItem('token', token);
-        router.push('/teacherprofile');
+    const submitTeacher = async () => {
+      setShowLoading(true) 
+        const result = await signIn("credentials", {
+            redirect:false,
+            email,
+            password
         })
-        .catch(error => {
-        console.error('Erro no login:', error);
-        })
-        .finally(() => {
-          setShowLoading(false)
-        })
-        ;
+        console.log(result)
     };
 
     const submitStudent = () => {

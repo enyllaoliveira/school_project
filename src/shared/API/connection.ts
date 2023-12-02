@@ -4,35 +4,42 @@ import { Errors } from "../constants/errorsEnum";
 
 
 export default class ConnectionAPI {
-    static async Call(url:string, method:string, body?:Object) {  //fará as requisições
+    static async Call<T>(url:string, method:string, body?:Object): Promise<T> {  //fará as requisições
         switch (method) {
             case Methods.GET:
                 return (
                     (await axios.get(url)).data
                 )
-            case Methods // continuar
-        
+                  
             default:
-                break;
-        }
+                return (await axios.post(url)).data
+            }
     }
 
-    static async Connect(url:string, method:string, body?:Object) { //só vai tratar erro
-        return ConnectionAPI.Call(url, method, body).catch((error) => {
+    static async Connect<T>(url:string, method:string, body?:Object): Promise<T> { //só vai tratar erro
+        return ConnectionAPI.Call<T>(url, method, body).catch((error) => {
             if (error.response) {
                 switch (error.response.status) {
                     case 401:
                         throw new Error(Errors.ERROR_ACCESS_NOT_AUTHORIZED)
                 
-                    // seguir aqui a lista    
+                    case 403:
+                        throw new Error(Errors.ERROR_CONNECTION)
+
                     default:
-                        break;
-                }
-            }
+                        throw new Error(Errors.ERROR_NOT_FOUND)
+                } 
+            } 
+            throw new Error(Errors.ERROR_CONNECTION)
+
         })
     }
 }
 
 export const ConnectionAPIGet = async (url:string) => {
     ConnectionAPI.Connect(url, Methods.GET )
+}
+
+export const ConnectionAPIPost = async <T>(url:string, body: Object): Promise<T> => {
+    return  ConnectionAPI.Connect<T>(url, Methods.POST, body )
 }

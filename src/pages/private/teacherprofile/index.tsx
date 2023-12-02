@@ -4,7 +4,6 @@
   import axios from 'axios';
   import { VscArrowDown } from "react-icons/vsc";
 
-
   interface Score {
     id: string;
     createdAt: string;
