@@ -3,7 +3,8 @@ import HeaderProfile from "@/components/headerProfiles";
 import axios from "axios"
 import { useState } from "react"
 import { useEffect } from "react"
-
+import ConnectionAPI from "@/shared/API/connection";
+import { ConnectionAPIGet } from "@/shared/API/connection";
 
 interface Score {
   id: string;
@@ -27,18 +28,25 @@ interface Student {
   scores: Score[];
 } 
 
+interface ApiResponse {
+  data: Student[]
+}
 
 export default function StudentProfile() {
 
   const [student, setStudent] = useState<Student | null>(null);
     
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    const headers = { 'Authorization': `Bearer ${token}` };
-    axios.get<Student>('https://test-dev.tikal.tech/aluno/score', {headers}).then(response => {
-      setStudent(response.data);
-    }); 
+    ConnectionAPIGet(`${process.env.URLBase}/adm/student`)
+      .then((response) => {
+        const typeResponse = response as ApiResponse
+        setStudent(response.data.length > 0 ? response.data[0] : null)
+      })
+      .catch(error => {
+        console.error("Erro ao obter dados do aluno:", error)
+      })
   }, [])
+
 
    return(
       <div>

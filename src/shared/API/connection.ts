@@ -1,45 +1,67 @@
-import axios from "axios";
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import { Methods } from "../constants/methodsEnum";
 import { Errors } from "../constants/errorsEnum";
 
-
 export default class ConnectionAPI {
-    static async Call<T>(url:string, method:string, body?:Object): Promise<T> {  //fará as requisições
-        switch (method) {
-            case Methods.GET:
-                return (
-                    (await axios.get(url)).data
-                )
-                  
-            default:
-                return (await axios.post(url)).data
-            }
+    private static headers: AxiosRequestConfig = {}
+
+    static setHeaders(headers: { [key: string]: string }): void {
+        ConnectionAPI.headers = { ...ConnectionAPI.headers, ...headers };
     }
 
-    static async Connect<T>(url:string, method:string, body?:Object): Promise<T> { //só vai tratar erro
-        return ConnectionAPI.Call<T>(url, method, body).catch((error) => {
+    static async Call<T>(url: string, method: string, body?: Object): Promise<T> {
+        const requestConfig: AxiosRequestConfig = {
+            method,
+            ...ConnectionAPI.headers,
+            ...(body && {data:body})
+        }
+        const response: AxiosResponse<T> = await axios(url, requestConfig);
+        return response.data;
+    }
+
+    static async Connect<T>(url: string, method: string, body?: Object): Promise<T> {
+        try {
+            return await ConnectionAPI.Call<T>(url, method, body);
+        } catch (error: any) {
             if (error.response) {
                 switch (error.response.status) {
                     case 401:
-                        throw new Error(Errors.ERROR_ACCESS_NOT_AUTHORIZED)
-                
+                        throw new Error(Errors.ERROR_ACCESS_NOT_AUTHORIZED);
                     case 403:
-                        throw new Error(Errors.ERROR_CONNECTION)
-
+                        throw new Error(Errors.ERROR_CONNECTION);
                     default:
-                        throw new Error(Errors.ERROR_NOT_FOUND)
-                } 
-            } 
-            throw new Error(Errors.ERROR_CONNECTION)
-
-        })
+                        throw new Error(Errors.ERROR_NOT_FOUND);
+                }
+            }
+            throw new Error(Errors.ERROR_CONNECTION);
+        }
     }
 }
 
-export const ConnectionAPIGet = async (url:string) => {
-    ConnectionAPI.Connect(url, Methods.GET )
+export const ConnectionAPIGet = async (url: string): Promise<any> => {
+    try {
+        const token = localStorage.getItem("token")
+        ConnectionAPI.setHeaders({
+            Authorization: `Bearer ${token}`
+    })
+        const response = await ConnectionAPI.Connect(url, Methods.GET);
+        return response;
+    } catch (error) {
+        console.error("Erro na requisição GET:", error);
+        throw error;
+    }
 }
 
-export const ConnectionAPIPost = async <T>(url:string, body: Object): Promise<T> => {
-    return  ConnectionAPI.Connect<T>(url, Methods.POST, body )
-}
+export const ConnectionAPIPost = async <T>(url: string, body: Object): Promise<T> => {
+    try {
+        const token = localStorage.getItem("token")
+        ConnectionAPI.setHeaders({
+            Authorization: `Bearer ${token}`
+    })
+    const response = await ConnectionAPI.Connect<T>(url, Methods.POST, body);
+        return response;
+    } catch (error) {
+     console.error("Erro na requisição POST:", error);
+     throw error; 
+    }
+ }

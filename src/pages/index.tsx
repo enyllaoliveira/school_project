@@ -1,19 +1,18 @@
-import Header from "@/components/header"
-// import AppRoutes from "@/components/routes"
-import Link from "next/link"
-import Login from "@/auth/login/page"
-import { AuthProvider } from "@/providers/auth-provider"
 import { useSession } from "next-auth/react"
+import Login from "./api/auth/signin/page"
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { data: session } = useSession()
+  const router = useRouter();
+  const isUser = !!session?.user;
 
   return (
-      <div>
-      
-        { session ? (<h1> Olá </h1>) :  <Login/> }
-      </div>
-
+    <div>
+      {!isUser && <Login />}
+    </div>
   )
 }
+
+
 

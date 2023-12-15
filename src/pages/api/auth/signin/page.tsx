@@ -2,49 +2,61 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Loading from '@/components/loading';
-import { signIn } from "next-auth/react";
+import { signIn } from 'next-auth/react';
 
 export default function Login() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isTeacher, setIsTeacher] = useState<boolean>(false);
+    const [isStudent, setIsStudent] = useState<boolean>(false);
     const [showLoading, setShowLoading] = useState(false);
     const router = useRouter();
     const isButtonDisabled = !email || !password;
 
     const changeUser = () => {
         setIsTeacher(!isTeacher)
+        setIsStudent(!isStudent)
     }
 
     const submitTeacher = async () => {
       setShowLoading(true) 
-        const result = await signIn("credentials", {
-            redirect:false,
-            email,
-            password
+        await signIn("credentials", {
+          email,
+          password,
+          redirect: true,
+          callbackUrl: `${isTeacher ? '/private/teacherprofile' : '/private/studentprofile'}`,
         })
-        console.log(result)
+        setShowLoading(false)
     };
 
-    const submitStudent = () => {
+    const submitStudent = async () => {
       setShowLoading(true)
-      axios.post('https://test-dev.tikal.tech/aluno/student/login', { email, password }).then(response => {
-        const token = response.data.token;    
-        localStorage.setItem('token', token);
-        router.push('/studentprofile');
-        })
-        .catch(error => {
-        console.error('Erro no login:', error);
-        })
-        .finally(() => {
-          setShowLoading(false)
-        })
-        ;
+      await signIn ("credentials", {
+        email,
+        password,
+        redirect: true,
+        callbackUrl: `${isStudent ? '/private/studentprofile' : 'private/teacherprofile'}`,
+      })
+      setShowLoading(false)
     }
 
-    useEffect( () => {
+      // axios.post('https://test-dev.tikal.tech/aluno/student/login', { email, password }).then(response => {
+      //   const token = response.data.token;    
+      //   localStorage.setItem('token', token);
+      //   router.push('/studentprofile');
+      //   })
+      //   .catch(error => {
+      //   console.error('Erro no login:', error);
+      //   })
+      //   .finally(() => {
+      //     setShowLoading(false)
+      //   })
+      //   ;
 
-    }, [changeUser]) 
+
+    // useEffect( () => {
+
+    // }, [changeUser]) 
 
   return (
 
@@ -110,3 +122,4 @@ export default function Login() {
   </div>
   );
 }
+

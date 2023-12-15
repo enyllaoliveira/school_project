@@ -1,4 +1,5 @@
 import { SessionProvider } from 'next-auth/react'
+import { CookiesProvider } from 'react-cookie'
 
 interface AuthProviderProps {
   children: React.ReactNode
@@ -6,6 +7,10 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
-    <SessionProvider>{children}</SessionProvider>
+    <SessionProvider>
+       <CookiesProvider>
+         {children}
+        </CookiesProvider>
+      </SessionProvider>
   )
 }

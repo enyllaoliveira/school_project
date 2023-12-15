@@ -1,10 +1,10 @@
-import { ConnectionAPIGet, ConnectionAPIPost } from "../API/connection";
+import axios from "axios";
+import {  ConnectionAPIPost } from "../API/connection";
 
 export const authRequest = async (url: string, body: any)=> {
-  console.log("olá")
-    // const result = await ConnectionAPIPost(url, body) 
-    // if (!result) {
-    //   throw new Error("Erro")
-    // }
-    // return result;
+    const result = (await axios.post(url, body)).data;
+    if (!result) {
+      throw new Error("Erro")
+    }
+    return result;
   };
