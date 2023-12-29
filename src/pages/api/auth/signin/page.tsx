@@ -40,24 +40,7 @@ export default function Login() {
       setShowLoading(false)
     }
 
-      // axios.post('https://test-dev.tikal.tech/aluno/student/login', { email, password }).then(response => {
-      //   const token = response.data.token;    
-      //   localStorage.setItem('token', token);
-      //   router.push('/studentprofile');
-      //   })
-      //   .catch(error => {
-      //   console.error('Erro no login:', error);
-      //   })
-      //   .finally(() => {
-      //     setShowLoading(false)
-      //   })
-      //   ;
-
-
-    // useEffect( () => {
-
-    // }, [changeUser]) 
-
+  
   return (
 
     <div className={`

@@ -1,6 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import { Methods } from "../constants/methodsEnum";
 import { Errors } from "../constants/errorsEnum";
+import Cookies from 'universal-cookie'
 
 export default class ConnectionAPI {
     private static headers: AxiosRequestConfig = {}
@@ -10,10 +11,15 @@ export default class ConnectionAPI {
     }
 
     static async Call<T>(url: string, method: string, body?: Object): Promise<T> {
-        const requestConfig: AxiosRequestConfig = {
+        const cookies = new Cookies()
+        const token = cookies.get('token')
+        ConnectionAPI.setHeaders({
+            Authorization: `Bearer ${token}`
+    }) 
+    const requestConfig: AxiosRequestConfig = {
             method,
             ...ConnectionAPI.headers,
-            ...(body && {data:body})
+            ...(body && {data: body})
         }
         const response: AxiosResponse<T> = await axios(url, requestConfig);
         return response.data;
@@ -40,10 +46,6 @@ export default class ConnectionAPI {
 
 export const ConnectionAPIGet = async (url: string): Promise<any> => {
     try {
-        const token = localStorage.getItem("token")
-        ConnectionAPI.setHeaders({
-            Authorization: `Bearer ${token}`
-    })
         const response = await ConnectionAPI.Connect(url, Methods.GET);
         return response;
     } catch (error) {
@@ -54,10 +56,6 @@ export const ConnectionAPIGet = async (url: string): Promise<any> => {
 
 export const ConnectionAPIPost = async <T>(url: string, body: Object): Promise<T> => {
     try {
-        const token = localStorage.getItem("token")
-        ConnectionAPI.setHeaders({
-            Authorization: `Bearer ${token}`
-    })
     const response = await ConnectionAPI.Connect<T>(url, Methods.POST, body);
         return response;
     } catch (error) {

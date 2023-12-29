@@ -46,7 +46,7 @@ const { data: session } = useSession()
       })
     }
 
-    ConnectionAPIGet(`${process.env.URLBase}/adm/teacher`)
+    ConnectionAPIGet(`${process.env.URLBase}/private/teacherprofile`)
     .then((response) => {
       const typeResponse = response as ApiResponse
       setStudents(typeResponse.data);

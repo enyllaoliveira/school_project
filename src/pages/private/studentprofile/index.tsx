@@ -37,7 +37,7 @@ export default function StudentProfile() {
   const [student, setStudent] = useState<Student | null>(null);
     
   useEffect(() => {
-    ConnectionAPIGet(`${process.env.URLBase}/adm/student`)
+    ConnectionAPIGet(`${process.env.URLBase}/private/studentprofile`)
       .then((response) => {
         const typeResponse = response as ApiResponse
         setStudent(response.data.length > 0 ? response.data[0] : null)
